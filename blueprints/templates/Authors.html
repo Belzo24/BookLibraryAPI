@@ -1,17 +1,54 @@
 <head>
-  <meta charset="UTF-8">
-  <title>Home</title>
-  <style>
-    body {
-      background-color: #ccc; /* light grey */
-      color: #000;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 20%;
-    }
-  </style>
+    <title>Authors</title>
+    <style>
+        table { border-collapse: collapse; width: 60%; margin: auto; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color:rgb(201, 186, 186); }
+        input[type="text"][name="update"] {
+            display: none;
+        }    </style>
+    <form id="myForm", method = "post" >
+        <input type="text" id="author_input" name="author_input" placeholder="Enter Author name">
+        <input type="text" id="birth" name="birth" placeholder="Enter Author birthdate">
+        <button type="submit" name = "action" value = "submit">Submit</button>
+    </form>
+    <form action="/home/author/add/" method="POST">
+        <button type="submit">Add</button>
+    </form>
 </head>
-<body>
-  <h1>This is Authors</h1>
-</body>
-</html>
+
+<h2 style="text-align:center;">User Table</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Author</th>
+                <th>ID</th>
+                <th>Birthdate</th>
+                <th>Update</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in Authors %}
+            <tr>
+                <td>{{ item.author_name }}</td>
+                <td>{{ item.author_id }}</td>
+                <td>{{ item.birth }}</td>
+                <td>
+                    <form action="/home/author/update/" method="POST">
+                        <input type="hidden" name="update" value="{{ item.author_id }}">
+                        <button type="submit"name = "update_pressed", value = "True">Update</button>
+                    </form>
+                </td>
+                                <td>
+                    <form action="/home/author/remove/" method="POST">
+                        <input type="hidden" name="data_remove" value="{{ item.author_id }}">
+                        <button type="submit" name="unalive" value="true">Remove</button>
+                    </form>
+                </td>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
