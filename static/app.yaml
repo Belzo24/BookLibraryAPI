@@ -1,0 +1,10 @@
+openapi: 3.0.3
+info:
+  title: Bookstore API
+  version: 1.0.0
+  description: API testing for managing books
+servers:
+  - url: http://localhost:5000
+
+paths:
+  description: "some sort of method, idk"
