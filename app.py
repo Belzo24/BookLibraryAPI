@@ -47,7 +47,7 @@ swagger_blueprint = get_swaggerui_blueprint(Swagger_url,API_URL, config={"app_na
 
 
 
-@app.route("/home/")
+@app.route("/home/", methods = ["GET","POST"])
 def home_page():
     return render_template("Home.html")
 

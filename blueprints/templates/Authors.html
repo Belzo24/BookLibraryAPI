@@ -1,6 +1,10 @@
 <head>
     <title>Authors</title>
     <style>
+        body {
+            background-color:rgb(105, 105, 105); /* light gray background */
+            font-family: Arial, sans-serif;
+        }
         table { border-collapse: collapse; width: 60%; margin: auto; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
         th { background-color:rgb(201, 186, 186); }
@@ -9,11 +13,14 @@
         }    </style>
     <form id="myForm", method = "post" >
         <input type="text" id="author_input" name="author_input" placeholder="Enter Author name">
-        <input type="text" id="birth" name="birth" placeholder="Enter Author birthdate">
+        <input type="text" id="birth" name="birth" placeholder="Enter Author's name">
         <button type="submit" name = "action" value = "submit">Submit</button>
     </form>
     <form action="/home/author/add/" method="POST">
         <button type="submit">Add</button>
+    </form>
+    <form action="/home/" method="POST">
+        <button type="submit">main menu</button>
     </form>
 </head>
 

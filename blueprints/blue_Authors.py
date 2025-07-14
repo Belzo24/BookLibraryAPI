@@ -18,7 +18,7 @@ def view_Authers():
 
 @authors_app.route("/home/author/add/", methods = ["GET","POST"])
 def add_data():
-    from app import Author, Add_data,db
+    from app import Author, Add_data,db, Add_data
     
     if request.method == "POST":
         author_new = Add_data("author",name, date)
@@ -39,12 +39,20 @@ def add_data():
 
 @authors_app.route("/home/author/remove/", methods = ["GET","POST"])
 def remove_data():
-    from app import Author, db
+    from app import Author, db, Books
 
-    temp = Author.query.get(request.form.get("data_remove"))
-    if temp:
+    author_temp = Author.query.get(request.form.get("data_remove"))
+    if author_temp:
         db.session.delete(Author.query.get(request.form.get("data_remove")))
         db.session.commit()
+        book_temp = Books.query.filter_by(author_foreign = author_temp.author_id).all()
+        
+        if book_temp:
+            for books in book_temp:
+                db.session.delete(books)
+            db.session.commit()
+            
+            
         flash("<h1>data has been removed</h1>")
         return redirect("/home/author/")
     else:
