@@ -7,8 +7,8 @@ import datetime
 from blueprints import blue_Authors, blue_Books, blue_Reviews
 
 
-app = Flask(__name__,template_folder="C:/Users/fakem/BookLibraryAPI/blueprints/templates")
-app.secret_key = "some secrete key"
+app = Flask(__name__,template_folder="")
+app.secret_key = ""
 
 
 class Add_data:
