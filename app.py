@@ -1,4 +1,5 @@
 from flask import Flask, request, flash, jsonify, render_template
+from flask_swagger_ui import get_swaggerui_blueprint
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 
@@ -41,15 +42,17 @@ db = SQLAlchemy(app)
 
 Swagger_url = "/testing/"
 API_URL = "/static/app.yaml"
+swagger_blueprint = get_swaggerui_blueprint(Swagger_url,API_URL, config={"app_name":"Book Store API"} )
 
 
 
 
-@app.route("/home/")
+@app.route("/home/", methods = ["GET","POST"])
 def home_page():
     return render_template("Home.html")
 
 
+app.register_blueprint(swagger_blueprint, url_prefix = Swagger_url)
 app.register_blueprint(blue_Authors.authors_app)
 app.register_blueprint(blue_Books.books_app)
 app.register_blueprint(blue_Reviews.Reviews_app)

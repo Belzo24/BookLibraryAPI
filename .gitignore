@@ -1,0 +1,17 @@
+.env
+*__pycache__
+*.db
+.idea/
+dump.rdb
+celerybeat-schedule
+celerybeat.pid
+wn-files/
+venv/
+.venv/
+backend/venv/
+__pycache__/
+*.pyc
+__pycache__/
+   *.pyc
+   venv/
+   .env
