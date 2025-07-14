@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Book Library{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">📚 Book Library</div>
+        <ul class="navbar-links">
+            <li><a href="/home/">Home</a></li>
+            <li><a href="/home/author/">Authors</a></li>
+            <li><a href="/home/books/">Books</a></li>
+            <li><a href="/home/reviews/">Reviews</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="/home/author/">Authors</a></li>
+                <li><a href="/home/books/">Books</a></li>
+                <li><a href="/home/reviews/">Reviews</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

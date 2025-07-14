@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Home | Book Library{% endblock %}
+{% block content %}
+<div class="home-welcome">
+    <h1>Welcome to the Book Library!</h1>
+    <p>Manage your Authors, Books, and Reviews with ease.</p>
+    <div class="home-actions">
+        <a href="/home/author/" class="btn fun-btn">Authors</a>
+        <a href="/home/books/" class="btn fun-btn">Books</a>
+        <a href="/home/reviews/" class="btn fun-btn">Reviews</a>
+    </div>
+</div>
+{% endblock %} 
