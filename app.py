@@ -1,14 +1,20 @@
 from flask import Flask, request, flash, jsonify, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+
 import datetime
 
 
 from blueprints import blue_Authors, blue_Books, blue_Reviews
 
 
+    
 app = Flask(__name__,template_folder="C:/Users/fakem/BookLibraryAPI/blueprints/templates")
 app.secret_key = "some secrete key"
+
+
+
 
 
 class Add_data:
@@ -77,6 +83,8 @@ class Reviews(db.Model):
     review_id = db.Column(db.String, primary_key=True ,nullable=False)
     review_value = db.Column(db.Integer, unique = True ,nullable=False)
     book_id = db.Column(db.String, db.ForeignKey('books.book_id') ,nullable=False)
+    username = db.Column(db.String, nullable=False)
+
     
 
 
