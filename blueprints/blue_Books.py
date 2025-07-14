@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template,request, flash, redirect
 
 
-books_app = Blueprint("books_app",__name__, template_folder="C:/Users/fakem/BookLibraryAPI/blueprints/templates")
+books_app = Blueprint("books_app",__name__, template_folder="/blueprints/templates")
 
 @books_app.route("/home/books/", methods = ["GET","POST"])
 def view_books():
@@ -50,5 +50,18 @@ def remove_books():
 
 @books_app.route("/home/books/update/", methods = ["GET","POST"])
 def update_books():
-    from app import db, Books
-    return "hello"
+    from app import db, Books , Add_data, Author
+    temp_book = Books.query.get(request.form.get("update"))
+    author_checker = Author.query.get(enter_author)
+    if author_checker:
+        
+        new_book = Add_data("book",book, temp_book.author_foreign)
+
+        temp_book.book_id = new_book.id_generator()
+        temp_book.book_name = new_book.name
+        temp_book.author_foreign = new_book.forgien_key
+        db.session.commit()
+        
+        return redirect("/home/books/")
+    else:
+        return"<h1>Author's name was not found</h1>"

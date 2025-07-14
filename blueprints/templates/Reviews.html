@@ -1,17 +1,63 @@
 <head>
-  <meta charset="UTF-8">
-  <title>Home</title>
-  <style>
-    body {
-      background-color: #ccc; /* light grey */
-      color: #000;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 20%;
-    }
-  </style>
+    <title>Reviews</title>
+    <style>
+        body {
+            background-color:rgb(105, 105, 105); /* light gray background */
+            font-family: Arial, sans-serif;
+        }
+        table { border-collapse: collapse; width: 60%; margin: auto; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color:rgb(201, 186, 186); }
+        input[type="text"][name="update"] {
+            display: none;
+        }    
+    </style>
+    <form id="myForm", method = "post" >
+        <input type="text" id="book" name="book" placeholder="book title">  
+        <input type="text" id="review_value" name="review_value" placeholder="number out of 5 Author">
+        <button type="submit" name = "action" value = "submit">Submit</button>
+    </form>
+    <form action="/home/reviews/add/" method="POST">
+        <button type="submit">Add</button>
+    </form>
+    <form action="/home/" method="post">
+        <button type="submit">main menu</button>
+    </form>
 </head>
-<body>
-  <h1>This is Reviews</h1>
-</body>
-</html>
+
+<h2 style="text-align:center;">Review Table</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Review value</th>
+                <th>Review ID</th>
+                <th>Forgien Book ID</th>
+                <th>Username</th>
+                <th>Update</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in reviews %}
+            <tr>
+                <td>{{ item.review_value }}</td>
+                <td>{{ item.review_id }}</td>
+                <td>{{ item.book_id }}</td>
+                <td>
+                    <form action="/home/reviews/update/" method="POST">
+                        <input type="hidden" name="update" value="{{ item.review_id }}">
+                        <button type="submit"name = "update_pressed", value = "True">Update</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="/home/reviews/remove/" method="POST">
+                        <input type="hidden" name="data_remove" value="{{ item.review_id }}">
+                        <button type="submit" name="unalive" value="true">Remove</button>
+                    </form>
+                </td>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
