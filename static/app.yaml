@@ -132,6 +132,8 @@ paths:
             text/html:
               schema:
                 type: string
+
+  /home/books/add/:
     post:
       summary: Add book (from HTML form)
       operationId: handlers.books.add_book_form
@@ -148,6 +150,8 @@ paths:
                 action:
                   type: string
       responses:
+        '200':
+          description: method is being called
         '302':
           description: Redirect to books page
 
@@ -198,15 +202,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-    put:
+  /home/books/update/:    
+    post:
       summary: Update book
       operationId: handlers.books.update_book
-      parameters:
-        - name: book_id
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -220,15 +219,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-    delete:
+
+  /home/books/remove/:
+    post:
       summary: Delete book
       operationId: handlers.books.delete_book
-      parameters:
-        - name: book_id
-          in: path
-          required: true
-          schema:
-            type: string
       responses:
         '204':
           description: Book deleted

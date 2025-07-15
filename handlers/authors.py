@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, url_for, jsonify, flash
+import requests
 from extensions import db
 from models import Author
 from sqlalchemy.exc import IntegrityError
@@ -45,24 +46,28 @@ def get_author(author_id):
     return {"author_id": author.author_id, "author_name": author.author_name, "birth": author.birth}
 
 def update_author():
-    author = Author.query.get("update")
+
+    data_json = request.get_json()
+
+    temp_author = data_json.get("author_name")
+    temp_birth = data_json.get("birth")
+    temp_id = data_json.get("author_id")
+
+    author = Author.query.get(temp_id)
     if not author:
         return {"error": "Not found"}, 404
+
+
+    author.author_name = temp_author    
+    author.birth = temp_birth
     
-    data = request.get_json()
-    
-    
-    if request.form.get("author_name") in data:
-        author.author_name = data['author_name']
-        
-    if request.form.get("birth") in data:
-        author.birth = data['birth']
     try:
         db.session.commit()
         return {"author_id": author.author_id, "author_name": author.author_name, "birth": author.birth}
     except IntegrityError:
         db.session.rollback()
-        return {"error": f"Author '{data.get('author_name', '')}' already exists!"}, 409
+        return {"error": f"Author '{data_json.get('author_name', '')}' already exists!"}, 409
+    
 
 def delete_author():
     temp_id = request.form.get("author_id")
