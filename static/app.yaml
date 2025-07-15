@@ -96,15 +96,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
-    put:
+  /home/author/update/:    
+    post:
       summary: Update author
       operationId: handlers.authors.update_author
-      parameters:
-        - name: author_id
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -118,15 +113,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
-    delete:
+  /home/author/remove/:
+    post:
       summary: Delete author
       operationId: handlers.authors.delete_author
-      parameters:
-        - name: author_id
-          in: path
-          required: true
-          schema:
-            type: string
       responses:
         '204':
           description: Author deleted

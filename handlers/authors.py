@@ -44,14 +44,18 @@ def get_author(author_id):
         return {"error": "Not found"}, 404
     return {"author_id": author.author_id, "author_name": author.author_name, "birth": author.birth}
 
-def update_author(author_id):
-    author = Author.query.get(author_id)
+def update_author():
+    author = Author.query.get("update")
     if not author:
         return {"error": "Not found"}, 404
+    
     data = request.get_json()
-    if 'author_name' in data:
+    
+    
+    if request.form.get("author_name") in data:
         author.author_name = data['author_name']
-    if 'birth' in data:
+        
+    if request.form.get("birth") in data:
         author.birth = data['birth']
     try:
         db.session.commit()
@@ -60,8 +64,9 @@ def update_author(author_id):
         db.session.rollback()
         return {"error": f"Author '{data.get('author_name', '')}' already exists!"}, 409
 
-def delete_author(author_id):
-    author = Author.query.get(author_id)
+def delete_author():
+    temp_id = request.form.get("author_id")
+    author = Author.query.get(temp_id)
     if not author:
         return '', 204
     db.session.delete(author)
