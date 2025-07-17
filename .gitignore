@@ -1,17 +1,39 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+# Virtual environments
+.env/
+.venv/
+venv/
+backend/venv/
+# Environment variables file
 .env
-*__pycache__
-*.db
+# IDEs and editors
 .idea/
+.vscode/
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+# Runtime files
+*.pid
+*.log
 dump.rdb
 celerybeat-schedule
 celerybeat.pid
-wn-files/
-venv/
-.venv/
-backend/venv/
-__pycache__/
-*.pyc
-__pycache__/
-   *.pyc
-   venv/
-   .env
+# Local databases
+*.db
+*.sqlite3
+# Unit test / coverage
+htmlcov/
+.coverage
+.tox/
+.pytest_cache/
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+# File upload dirs
+files/
+uploads/
+media/

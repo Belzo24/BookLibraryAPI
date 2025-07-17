@@ -1,10 +1,412 @@
 openapi: 3.0.3
 info:
-  title: Bookstore API
+  title: Book Library API
   version: 1.0.0
-  description: API testing for managing books
+  description: API and HTML for managing authors, books, and reviews
 servers:
   - url: http://localhost:5000
 
 paths:
-  description: "some sort of method, idk"
+  /home/:
+    get:
+      summary: Home page
+      operationId: handlers.home.get_home
+      responses:
+        '200':
+          description: Home HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /home/author/:
+    get:
+      summary: Authors HTML page
+      operationId: handlers.authors.get_authors_page
+      responses:
+        '200':
+          description: Authors HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+    post:
+      summary: Add author (from HTML form)
+      operationId: handlers.authors.add_author_form
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                author_input:
+                  type: string
+                birth:
+                  type: string
+                action:
+                  type: string
+      responses:
+        '302':
+          description: Redirect to authors page
+
+  /api/authors:
+    get:
+      summary: List all authors
+      operationId: handlers.authors.list_authors
+      responses:
+        '200':
+          description: List of authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+    post:
+      summary: Create a new author
+      operationId: handlers.authors.create_author
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorCreate'
+      responses:
+        '201':
+          description: Author created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+
+  /api/authors/{author_id}:
+    get:
+      summary: Get author by ID
+      operationId: handlers.authors.get_author
+      parameters:
+        - name: author_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Author details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+  /home/author/update/:    
+    post:
+      summary: Update author
+      operationId: handlers.authors.update_author
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorUpdate'
+      responses:
+        '200':
+          description: Author updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+  /home/author/remove/:
+    post:
+      summary: Delete author
+      operationId: handlers.authors.delete_author
+      responses:
+        '204':
+          description: Author deleted
+
+  /home/books/:
+    get:
+      summary: Books HTML page
+      operationId: handlers.books.get_books_page
+      responses:
+        '200':
+          description: Books HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /home/books/add/:
+    post:
+      summary: Add book (from HTML form)
+      operationId: handlers.books.add_book_form
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                author_input:
+                  type: string
+                book:
+                  type: string
+                action:
+                  type: string
+      responses:
+        '200':
+          description: method is being called
+        '302':
+          description: Redirect to books page
+
+  /api/books:
+    get:
+      summary: List all books
+      operationId: handlers.books.list_books
+      responses:
+        '200':
+          description: List of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Create a new book
+      operationId: handlers.books.create_book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookCreate'
+      responses:
+        '201':
+          description: Book created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+  /api/books/{book_id}:
+    get:
+      summary: Get book by ID
+      operationId: handlers.books.get_book
+      parameters:
+        - name: book_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Book details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+                
+  /home/books/update/:    
+    post:
+      summary: Update book
+      operationId: handlers.books.update_book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookUpdate'
+      responses:
+        '200':
+          description: Book updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+  /home/books/remove/:
+    post:
+      summary: Delete book
+      operationId: handlers.books.delete_book
+      responses:
+        '204':
+          description: Book deleted
+
+  /home/reviews/:
+    get:
+      summary: Reviews HTML page
+      operationId: handlers.reviews.get_reviews_page
+      responses:
+        '200':
+          description: Reviews HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /api/reviews:
+    get:
+      summary: List all reviews
+      operationId: handlers.reviews.list_reviews
+      responses:
+        '200':
+          description: List of reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+
+  /home/reviews/add/:
+    post:
+      summary: Create a new review
+      operationId: handlers.reviews.create_review
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewCreate'
+
+      responses:
+        '201':
+          description: Review created
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/reviews/{review_id}:
+    get:
+      summary: Get review by ID
+      operationId: handlers.reviews.get_review
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Review details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+
+  /home/reviews/update/{review_id}:
+    post:
+      summary: Update review
+      operationId: handlers.reviews.update_review
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewUpdate'
+      responses:
+        '200':
+          description: Review updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+
+  /home/reviews/remove/{review_id}:
+    post:
+      summary: Delete review
+      operationId: handlers.reviews.delete_review
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Review deleted
+
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        author_id:
+          type: string
+        author_name:
+          type: string
+        birth:
+          type: string
+    AuthorCreate:
+      type: object
+      required: [author_name, birth]
+      properties:
+        author_name:
+          type: string
+        birth:
+          type: string
+    AuthorUpdate:
+      type: object
+      properties:
+        author_name:
+          type: string
+        birth:
+          type: string
+    Book:
+      type: object
+      properties:
+        book_id:
+          type: string
+        book_name:
+          type: string
+        author_foreign:
+          type: string
+    BookCreate:
+      type: object
+      required: [book_name, author_foreign]
+      properties:
+        book_name:
+          type: string
+        author_foreign:
+          type: string
+    BookUpdate:
+      type: object
+      properties:
+        book_name:
+          type: string
+        author_foreign:
+          type: string
+    Review:
+      type: object
+      properties:
+        review_id:
+          type: string
+        review_value:
+          type: string
+        book_id:
+          type: string
+    ReviewCreate:
+      type: object
+      required:
+        - review_value
+        - book_id
+      properties:
+        review_id:
+          type: string
+        review_value:
+          type: string
+        book_id:
+          type: string
+        update_book_id:
+          type: string
+    ReviewUpdate:
+      type: object
+      properties:
+        review_value:
+          type: string
+        update_book_id:
+          type: string
