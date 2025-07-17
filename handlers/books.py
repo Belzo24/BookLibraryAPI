@@ -50,10 +50,11 @@ def update_book():
     data = request.get_json()
     
     book_id = data.get("book_id")
-    author_foreign = data.get("author_foreign")
+    author_foreign = data.get("author_key")
     book_name = data.get("book_name")
 
-
+    print(f"book_id: {book_id}, author_foreign: {author_foreign}, book_name: {book_name}")
+    
     author = Author.query.filter_by(author_id=author_foreign).first()
     if not author:
         return {"error": "Author not found"}, 404

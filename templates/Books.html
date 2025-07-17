@@ -30,7 +30,7 @@
                 <form action="/home/books/update/" method="POST" class="update-form" style="display:none;">
                     <input type="hidden" name="update" value="{{ item.book_id }}">
                     <input type="text" name="book_name" value="{{ item.book_name }}" required>
-                    <input type="text" name="author_name" value="{{ item.author_foreign }}" required>
+                    <input type="text" name="author_key" value="{{ item.author_foreign }}" required>
                     <button type="submit" class="btn save-btn">Save</button>
                     <button type="button" class="btn cancel-btn" onclick="cancelEdit(this)">Cancel</button>
                 </form>
@@ -58,12 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = new FormData(form);
       const book_id = formData.get('update');
       const bookName = formData.get('book_name');
-      const authorForeign = formData.get('author_foreign');
+      const authorForeign = formData.get('author_key');
 
       const data = {
-        author_id: authorId,
-        author_name: authorName,
-        birth: birth
+        book_id: book_id,
+        book_name: bookName,
+        author_key: authorForeign
       };
 
       try {
@@ -85,16 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Update successful!');
 
         const row = form.closest('tr');
-        row.querySelector('.author-name').textContent = json.author_name;
-        row.querySelector('.author-birth').textContent = json.birth;
-
+        row.querySelector('.book-name').textContent = json.book_name;
+        row.querySelector('.book-author').textContent = json.author_name;
+        
         cancelEdit(form.querySelector('.cancel-btn'));
       } catch (error) {
-        alert('Failed to update author: ' + error);
+        alert('Failed to update book: ' + error);
       }
     });
   });
 });
+
 
 </script>
 {% endblock %}
