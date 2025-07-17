@@ -1,9 +1,10 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect, url_for
 from extensions import db
 from models import Review, Book
 
 def get_reviews_page():
-    return render_template('Reviews.html')
+    review_table = Review.query.all()
+    return render_template('Reviews.html', reviews=review_table)
 
 def list_reviews():
     reviews = Review.query.all()
@@ -13,11 +14,14 @@ def list_reviews():
     ])
 
 def create_review():
-    data = request.get_json()
-    review = Review(review_id=str(hash(str(data['review_value'])+data['book_id'])), review_value=data['review_value'], book_id=data['book_id'])
+
+    review_value = request.form.get('review_value')
+    book_id = request.form.get('book_id')
+
+    review = Review(review_id=str(hash(str(review_value))), review_value=review_value, book_id=book_id)
     db.session.add(review)
     db.session.commit()
-    return jsonify({"review_id": review.review_id, "review_value": review.review_value, "book_id": review.book_id}), 201
+    return redirect(url_for('handlers_reviews_get_reviews_page')), 201
 
 def get_review(review_id):
     review = Review.query.get(review_id)
@@ -32,10 +36,10 @@ def update_review(review_id):
     data = request.get_json()
     if 'review_value' in data:
         review.review_value = data['review_value']
-    if 'book_id' in data:
-        review.book_id = data['book_id']
+    if 'update_book_id' in data:
+        review.book_id = data['update_book_id']
     db.session.commit()
-    return {"review_id": review.review_id, "review_value": review.review_value, "book_id": review.book_id}
+    return jsonify({"redirect": url_for('handlers_reviews_get_reviews_page')})
 
 def delete_review(review_id):
     review = Review.query.get(review_id)
@@ -43,4 +47,4 @@ def delete_review(review_id):
         return '', 204
     db.session.delete(review)
     db.session.commit()
-    return '', 204 
+    return redirect(url_for('handlers_reviews_get_reviews_page')), 204 

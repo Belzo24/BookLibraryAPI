@@ -1,13 +1,138 @@
 {% extends 'base.html' %}
+
 {% block title %}Reviews | Book Library{% endblock %}
+
 {% block content %}
-<div class="reviews-section">
-    <h2>Reviews</h2>
-    <div class="fun-reviews">
-        <p>⭐️⭐️⭐️⭐️⭐️</p>
-        <p>"A wonderful place to manage your books and authors!"</p>
-        <p>"Easy to use and visually stunning!"</p>
-        <p>"I love the new look!"</p>
-    </div>
+<div class="container">
+  <h2>Reviews</h2>
+
+  <!-- Add Review Form -->
+  <form action="/home/reviews/add" method="post" class="form">
+    <input type="text" name="review_value" placeholder="Enter Review Value" required>
+    <input type="text" name="book_id" placeholder="Enter Book ID" required>
+    <button type="submit" class="btn-add">Add Review</button>
+  </form>
+
+  <!-- Review Table -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr class="table-header">
+          <th>Review ID</th>
+          <th>Review Value</th>
+          <th>Book ID</th>
+          <th>Update</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in reviews %}
+        <tr class="{% if loop.index % 2 == 0 %}even-row{% else %}odd-row{% endif %}" data-id="{{ item.review_id }}">
+          <td class="review_id_id">{{ item.review_id }}</td>
+          <td class="review_value">{{ item.review_value }}</td>
+          <td class="book_id">{{ item.book_id }}</td>
+          <td>
+            <button class="btn-update" onclick="editRow(this)">Update</button>
+            <form action="/home/reviews/update/{{ item.review_id }}" method="POST" class="update-form" style="display: none;">
+              <input type="hidden" name="review_id" value="{{ item.review_id }}">
+              <input type="text" name="review_value" value="{{ item.review_value }}" required>
+              <input type="text" name="update_book_id" value="{{ item.book_id }}" required>
+              <button type="submit" class="btn-update">Save</button>
+              <button type="button" class="btn-cancel" onclick="cancelEdit(this)">Cancel</button>
+            </form>
+          </td>
+          <td>
+            <form action="/home/reviews/remove/{{ item.review_id }}" method="POST">
+              <input type="hidden" name="review_id" value="{{ item.review_id }}">
+              <button type="submit" class="btn-remove">Remove</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
-{% endblock %} 
+{% endblock %}
+
+{% block scripts %}
+<script>
+function editRow(button) {
+  const row = button.closest('tr');
+  row.classList.add('editable-row');
+  button.style.display = 'none';
+  const form = row.querySelector('.update-form');
+  form.style.display = 'inline-block';
+}
+
+function cancelEdit(button) {
+  const form = button.closest('.update-form');
+  const row = form.closest('tr');
+  form.style.display = 'none';
+  row.querySelector('.btn-update').style.display = 'inline-block';
+  row.classList.remove('editable-row');
+}
+</script>
+
+
+<script>
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const updateForms = document.querySelectorAll('.update-form');
+
+  updateForms.forEach(form => {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault(); 
+
+      const formData = new FormData(form);
+      const reviewId = formData.get('review_id');
+      const reviewValue = formData.get('review_value');
+      const updateBookId = formData.get('update_book_id'); 
+
+      const data = {
+        review_id: reviewId,
+        review_value: reviewValue,
+        update_book_id: updateBookId
+      };
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          const err = await response.text();
+          alert(`Error: ${err}`);
+          return;
+        }
+
+        const json = await response.json();
+        alert('Update successful!');
+
+        const row = form.closest('tr');
+
+        if (row) {
+          const reviewValueCell = row.querySelector('.review_value');
+          const bookIdCell = row.querySelector('.book_id');
+
+          if (reviewValueCell) reviewValueCell.textContent = json.review_value;
+          if (bookIdCell) bookIdCell.textContent = json.book_id;
+        }
+
+        cancelEdit(form.querySelector('.btn-cancel'));  // also fixed class here, assuming 'btn-cancel'
+      } catch (error) {
+        alert('Failed to update review: ' + error);
+      }
+    });
+  });
+});
+
+
+
+</script>
+{% endblock %}
