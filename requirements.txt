@@ -12,3 +12,7 @@ typing_extensions==4.14.1
 Werkzeug==2.2.3
 connexion[swagger-ui]==2.14.2
 pydantic==2.11.7
+pytest
+pytest-flask
+pytest-cov
+Faker

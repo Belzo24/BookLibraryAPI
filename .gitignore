@@ -1,0 +1,45 @@
+# Python
+###################
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# pytest
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Database files
+# The instance folder contains the SQLite database and other instance-specific files.
+instance/
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# IDE / Editor
+###################
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+###################
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db 
