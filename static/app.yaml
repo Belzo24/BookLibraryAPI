@@ -96,15 +96,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
-    put:
+  /home/author/update/:    
+    post:
       summary: Update author
       operationId: handlers.authors.update_author
-      parameters:
-        - name: author_id
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -118,15 +113,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
-    delete:
+  /home/author/remove/:
+    post:
       summary: Delete author
       operationId: handlers.authors.delete_author
-      parameters:
-        - name: author_id
-          in: path
-          required: true
-          schema:
-            type: string
       responses:
         '204':
           description: Author deleted
@@ -142,6 +132,8 @@ paths:
             text/html:
               schema:
                 type: string
+
+  /home/books/add/:
     post:
       summary: Add book (from HTML form)
       operationId: handlers.books.add_book_form
@@ -158,6 +150,8 @@ paths:
                 action:
                   type: string
       responses:
+        '200':
+          description: method is being called
         '302':
           description: Redirect to books page
 
@@ -208,15 +202,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-    put:
+                
+  /home/books/update/:    
+    post:
       summary: Update book
       operationId: handlers.books.update_book
-      parameters:
-        - name: book_id
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -230,15 +220,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-    delete:
+
+  /home/books/remove/:
+    post:
       summary: Delete book
       operationId: handlers.books.delete_book
-      parameters:
-        - name: book_id
-          in: path
-          required: true
-          schema:
-            type: string
       responses:
         '204':
           description: Book deleted
@@ -268,22 +254,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Review'
+
+  /home/reviews/add/:
     post:
       summary: Create a new review
       operationId: handlers.reviews.create_review
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/ReviewCreate'
+
       responses:
         '201':
           description: Review created
           content:
-            application/json:
+            text/plain:
               schema:
-                $ref: '#/components/schemas/Review'
+                type: string
 
   /api/reviews/{review_id}:
     get:
@@ -302,7 +291,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-    put:
+
+  /home/reviews/update/{review_id}:
+    post:
       summary: Update review
       operationId: handlers.reviews.update_review
       parameters:
@@ -324,7 +315,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-    delete:
+
+  /home/reviews/remove/{review_id}:
+    post:
       summary: Delete review
       operationId: handlers.reviews.delete_review
       parameters:
@@ -393,21 +386,27 @@ components:
         review_id:
           type: string
         review_value:
-          type: integer
+          type: string
         book_id:
           type: string
     ReviewCreate:
       type: object
-      required: [review_value, book_id]
+      required:
+        - review_value
+        - book_id
       properties:
+        review_id:
+          type: string
         review_value:
-          type: integer
+          type: string
         book_id:
+          type: string
+        update_book_id:
           type: string
     ReviewUpdate:
       type: object
       properties:
         review_value:
-          type: integer
-        book_id:
+          type: string
+        update_book_id:
           type: string

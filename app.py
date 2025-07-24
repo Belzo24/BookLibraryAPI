@@ -3,6 +3,8 @@ import secrets
 import connexion
 from flask import Flask
 from extensions import db
+import logging
+
 
 def create_app():
     connex_app = connexion.App(__name__, specification_dir="static/")

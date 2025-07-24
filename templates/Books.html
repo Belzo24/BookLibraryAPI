@@ -3,7 +3,7 @@
 {% block content %}
 <h2>Books</h2>
 <div class="form-section">
-    <form id="addBookForm" method="post">
+    <form action = "/home/books/add/" id="addBookForm" method="post">
         <input type="text" id="author_input" name="author_input" placeholder="Enter Author" required>
         <input type="text" id="book" name="book" placeholder="Book Title" required>
         <button type="submit" class="btn fun-btn" name="action" value="submit">Add Book</button>
@@ -30,7 +30,7 @@
                 <form action="/home/books/update/" method="POST" class="update-form" style="display:none;">
                     <input type="hidden" name="update" value="{{ item.book_id }}">
                     <input type="text" name="book_name" value="{{ item.book_name }}" required>
-                    <input type="text" name="author_foreign" value="{{ item.author_foreign }}" required>
+                    <input type="text" name="author_key" value="{{ item.author_foreign }}" required>
                     <button type="submit" class="btn save-btn">Save</button>
                     <button type="button" class="btn cancel-btn" onclick="cancelEdit(this)">Cancel</button>
                 </form>
@@ -45,8 +45,62 @@
         {% endfor %}
     </tbody>
 </table>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const updateForms = document.querySelectorAll('.update-form');
+
+  updateForms.forEach(form => {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault(); 
+
+      const formData = new FormData(form);
+      const book_id = formData.get('update');
+      const bookName = formData.get('book_name');
+      const authorForeign = formData.get('author_key');
+
+      const data = {
+        book_id: book_id,
+        book_name: bookName,
+        author_key: authorForeign
+      };
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          const err = await response.text();
+          alert(`Error: ${err}`);
+          return;
+        }
+
+        const json = await response.json();
+        alert('Update successful!');
+
+        const row = form.closest('tr');
+        row.querySelector('.book-name').textContent = json.book_name;
+        row.querySelector('.book-author').textContent = json.author_name;
+        
+        cancelEdit(form.querySelector('.cancel-btn'));
+      } catch (error) {
+        alert('Failed to update book: ' + error);
+      }
+    });
+  });
+});
+
+
+</script>
 {% endblock %}
 {% block scripts %}
+
 <script>
 function editRow(btn) {
     const row = btn.closest('tr');
